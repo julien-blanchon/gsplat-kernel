@@ -9,13 +9,8 @@
 
 namespace cg = cooperative_groups;
 
-// ============================================================================
-// CUDA Kernels for 2D Gaussian Splatting Pipeline
-// ============================================================================
-
 /**
  * CUDA Kernel: Project 2D Gaussians to screen space
- * Always uses inverse scale, no quantization
  */
 __global__ void project_gaussians_2d_kernel(
     const int num_points,
@@ -51,7 +46,6 @@ __global__ void project_gaussians_2d_kernel(
 
 /**
  * CUDA Kernel: Rasterize 2D Gaussians with Top-K normalization
- * Simplified version without tiling, always uses top-K normalization
  */
 __global__ void rasterize_gaussians_2d_kernel(
     const int img_height,
@@ -142,10 +136,6 @@ __global__ void rasterize_gaussians_2d_kernel(
         out_img[pix_id * channels + c] = pix_out[c];
     }
 }
-
-// ============================================================================
-// Tensor wrapper functions (following kernel-builder patterns)
-// ============================================================================
 
 std::tuple<torch::Tensor, torch::Tensor> project_gaussians_2d(
     torch::Tensor &means2d,

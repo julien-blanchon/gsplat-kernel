@@ -18,7 +18,6 @@ Usage:
 """
 
 import argparse
-import os
 import struct
 from pathlib import Path
 from time import perf_counter
@@ -33,15 +32,16 @@ from kernels.utils import get_local_kernel
 
 
 def load_g2d_file(
-    g2d_path: str,
+    g2d_path: Path,
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, Dict[str, Any]]:
     """Load G2D binary file containing 2D Gaussian splatting data."""
     print(f"Loading G2D file from {g2d_path}")
+    g2d_path = Path(g2d_path) if not isinstance(g2d_path, Path) else g2d_path
 
-    if not os.path.exists(g2d_path):
+    if not g2d_path.exists():
         raise FileNotFoundError(f"G2D file not found: {g2d_path}")
 
-    with open(g2d_path, "rb") as f:
+    with g2d_path.open("rb") as f:
         # Parse 32-byte header
         magic = f.read(4)
         if magic != b"G2D\0":
