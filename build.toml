@@ -1,0 +1,17 @@
+[general]
+name = "gsplat"
+universal = false
+
+[torch]
+src = [
+    "torch-ext/torch_binding.cpp",
+    "torch-ext/torch_binding.h",
+]
+
+[kernel.gsplat]
+backend = "cuda"
+depends = ["torch"]
+src = [
+    "gsplat_kernel/gsplat_kernels.cu",
+    "gsplat_kernel/gsplat_math.h",
+]
